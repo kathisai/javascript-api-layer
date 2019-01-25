@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+    crossorigin="anonymous">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+    crossorigin="anonymous">
+  <title>Custom Http Library</title>
+</head>
+
+<body>
+  <div class="container main">
+
+    <h1 class="text-center display-4">Custom Http Library</h1>
+
+    <div class="row buttons">
+      <div class="col-md-3 ">
+        <button class="get btn btn-default btn-block btn-primary" type="submit">GET</button>
+      </div>
+      <div class="col-md-3 ">
+        <button class="post btn btn-default btn-block btn-info" type="submit">POST</button>
+      </div>
+      <div class="col-md-3 ">
+        <button class="put btn btn-default btn-block btn-warning" type="submit">PUT</button>
+      </div>
+      <div class="col-md-3 ">
+        <button class="delete btn btn-default btn-block btn-danger" type="submit">DELETE</button>
+      </div>
+    </div>
+
+    <div class="row operations">
+
+
+    </div>
+
+    <div class="container p-3 post-form">
+      <div class="card border-info mb-3">
+        <div class="card-body">
+          <h3 class="card-title">Add Person Details</h3>
+          <form>
+            <div class="container row">
+
+              <div class="form-group col-lg-6">
+                <label for="ID">ID</label>
+                <input type="text" class="form-control" id="ID" placeholder="ID">
+              </div>
+
+              <div class="form-group col-lg-6">
+                <label for="fname">First Name</label>
+                <input type="text" class="form-control" id="fname" placeholder="First Name">
+              </div>
+
+              <div class="form-group col-lg-6">
+                <label for="lname">Last Name</label>
+                <input type="text" class="form-control" id="lname" placeholder="Last Name">
+              </div>
+
+              <div class="form-group col-lg-6">
+                <label for="gender">Gender</label>
+                <input type="text" class="form-control" id="gender" placeholder="Gender">
+              </div>
+
+              <div class="form-group col-lg-6">
+                <label for="age">Age</label>
+                <input type="text" class="form-control" id="age" placeholder="Age">
+              </div>
+
+              <div class="form-group col-lg-6">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" id="email" placeholder="Email">
+              </div>
+              <div class="form-group col-lg-6">
+                <label for="companyID">Company ID</label>
+                <input type="text" class="form-control" id="companyID" placeholder="Company ID">
+              </div>
+
+              <div class="container">
+                <button type="submit" class="add-person btn btn-outline-info p-1 m-1">
+                  <i class="fa fa-plus" aria-hidden="true"></i> Add Person</button>
+              </div>
+              <div class="container">
+                  <button type="submit" class="put-user btn btn-outline-warning p-1 m-1">
+                    <i class="fa fa-plus" aria-hidden="true"></i>Update User Details</button>
+                </div>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="container p-3 put-form">
+      <div class="card border-warning mb-3">
+        <div class="card-body">
+          <h3 class="card-title">Enter person ID to UPDATE</h3>
+          <form>
+            <div class="container row">
+
+              <div class="form-group col-lg-6">
+                <label for="put-id">ID</label>
+                <input type="text" class="form-control" id="put-id" placeholder="ID">
+              </div>
+
+
+              <div class="container">
+                <button type="submit" class="get-person btn btn-outline-warning p-1 m-1">
+                  <i class="fa fa-plus" aria-hidden="true"></i> Get Person</button>
+              </div>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="container p-3 delete-form">
+        <div class="card border-danger mb-3">
+          <div class="card-body">
+            <h3 class="card-title">Enter person ID to DELETE</h3>
+            <form>
+              <div class="container row">
+  
+                <div class="form-group col-lg-6">
+                  <label for="delete-id">ID</label>
+                  <input type="text" class="form-control" id="delete-id" placeholder="ID">
+                </div>
+  
+  
+                <div class="container">
+                  <button type="submit" class="delete-person btn btn-outline-danger p-1 m-1">
+                    <i class="fa fa-minus" aria-hidden="true"></i> Delete Person</button>
+                </div>
+  
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+  </div>
+
+
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+    crossorigin="anonymous"></script>
+
+  <script src="easyHttp.js"></script>    
+  <script src="data.js"></script>    
+  <script src="UI.js"></script>
+  <script src="code.js"></script>
+  <script src="eventListners.js"></script>
+
+
+</body>
+
+</html>
+
