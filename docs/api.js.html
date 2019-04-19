@@ -26,7 +26,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Api.html">Api</a><ul class='methods'><li data-type='method'><a href="Api.html#deleteUser">deleteUser</a></li><li data-type='method'><a href="Api.html#getUser">getUser</a></li><li data-type='method'><a href="Api.html#getUsers">getUsers</a></li><li data-type='method'><a href="Api.html#postUser">postUser</a></li></ul></li><li><a href="Server.html">Server</a><ul class='methods'><li data-type='method'><a href="Server.html#delete">delete</a></li><li data-type='method'><a href="Server.html#get">get</a></li><li data-type='method'><a href="Server.html#post">post</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#error">error</a></li><li><a href="global.html#success">success</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Api.html">Api</a><ul class='methods'><li data-type='method'><a href="Api.html#getAuth">getAuth</a></li><li data-type='method'><a href="Api.html#getPersonalVolume">getPersonalVolume</a></li><li data-type='method'><a href="Api.html#getRanks">getRanks</a></li><li data-type='method'><a href="Api.html#getVolumes">getVolumes</a></li></ul></li><li><a href="Server.html">Server</a><ul class='methods'><li data-type='method'><a href="Server.html#delete">delete</a></li><li data-type='method'><a href="Server.html#get">get</a></li><li data-type='method'><a href="Server.html#post">post</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#error">error</a></li><li><a href="global.html#success">success</a></li></ul>
 </nav>
 
 <div id="main">
@@ -41,109 +41,156 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>let singletonAxiosInstance = require('./server.js')
-let LRU = require('./LRU.js');
+            <pre class="prettyprint source linenums"><code>let singletonAxiosInstance = require("./server.js");
+let LRU = require("./LRU.js");
+let OAuth = require("./OAuth.js");
 let lruCache = new LRU(100); // Cache limit is 10 items
+
+const auth = new OAuth();
 /**
  * This class act as base class for JavaScript API.
  * All network methods will be added to this class.
  * User has to acces only this class from outside
  */
 class Api {
-    constructor() {
-        this.server = singletonAxiosInstance;
+  constructor() {
+    this.server = singletonAxiosInstance;
+  }
+
+  /**
+   * Get Rank details from API
+   * @param  params
+   * @param  s  Sucess function
+   * @param  e  Error function
+   */
+  getRanks(params, s = success, e = error) {
+    if (!auth.isAuthenticated()) {
+      auth.login( () => {
+          this.getRanks(params, s , e );
+      });
+    } else {
+      const options =  {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+          'x-api-key': "E5783321"
+
+      };
+      this.server
+        .get("/commissions/settings/ranks", params, options)
+        .then(data => {
+          var cache = lruCache.read("ranks");
+          if (cache) {
+            s(cache);
+          } else {
+            lruCache.write("ranks", data.data);
+            s(data.data);
+          }
+        })
+        .catch(err => {
+          e(err);
+        });
     }
+  }
 
-    /**
-     * Get all users from API
-     * @param  params 
-     * @param  s  Sucess function  
-     * @param  e  Error function
-     */
-    getUsers(params, s = success, e = error) {
-        this.server.get('/users/', params)
-            .then(
-                data => {
-                    var cache = lruCache.read('users');
-                    if (cache) {
-                        console.log('from cache', cache);
-                        s(cache);
-                    } else {
-                        lruCache.write('users', data.data);
-                        console.log('stored in cache');
-                        s(data.data);
-                    }
-                }
-            )
-            .catch(err => {
-                e(err)
-            })
+  /**
+   * 
+   * @param  distID 
+   * @param  bounusPeriod 
+   * @param  params 
+   * @param  s Sucess function
+   * @param  e Error function
+   */
+  getVolumes(distID, bounusPeriod = "", params, s = success, e = error) {
+    if (!auth.isAuthenticated()) {
+      auth.login( () => {
+          this.getVolumes(params, s , e );
+      });
+    } else {
+      const options =  {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+          'x-api-key': "E5783321"
+
+      };
+      this.server
+        .get("/commissions/qualifications/volumes/"+ distID + "/" + bounusPeriod , params, options)
+        .then(data => {
+          var cache = lruCache.read("volumes");
+          if (cache) {
+            s(cache);
+          } else {
+            lruCache.write("volumes", data.data);
+            s(data.data);
+          }
+        })
+        .catch(err => {
+          e(err);
+        });
     }
+  }
 
-    /**
-     * Get specific user
-     * @param  id  unique id for users
-     * @param  params 
-     * @param s Sucess function 
-     * @param  e  Error function
-     */
-    getUser(id, params, s = success, e = error) {
-        this.server.get(`/users/${id}`, params)
-            .then(data => s(data.data))
-            .catch(err => e(err))
+  /**
+   * 
+   * @param  distID 
+   * @param  bounusPeriod 
+   * @param  params 
+   * @param  s Sucess function
+   * @param  e Error function
+   */
+  getPersonalVolume(distID, bounusPeriod = "", params, s = success, e = error){
+
+    if (!auth.isAuthenticated()) {
+      auth.login( () => {
+          this.getVolumes(params, s , e );
+      });
+    } else {
+      const options =  {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+          'x-api-key': "E5783321"
+
+      };
+      this.server
+        .get("/commissions/qualifications/volumes/"+ distID + "/personal/" +  bounusPeriod, params, options)
+        .then(data => {
+          var cache = lruCache.read("volumes");
+          if (cache) {
+            s(cache);
+          } else {
+            lruCache.write("volumes", data.data);
+            s(data.data);
+          }
+        })
+        .catch(err => {
+          e(err);
+        });
     }
+  }
 
-    /**
-     * Post user details 
-     * @param  data 
-     * @param  params 
-     * @param  s Sucess function 
-     * @param  e  Error function
-     */
-    postUser(data, params, s = success, e = error) {
-        this.server.post(`/users/`, data, params)
-            .then(data => s(data.data))
-            .catch(err => e(err))
-    }
-
-    /**
-     * Deleted Users details
-     * @param  id unique id for users
-     * @param  params 
-     * @param  s Sucess function
-     * @param  e  Error function
-     */
-    deleteUser(id, params, s = success, e = error) {
-        this.server.delete(`/users/${id}`, id, params)
-            .then(data => s(data.data))
-            .catch(err => e(err))
-    }
-
-
+  /**
+   * Get {@link OAuth} object for callback.html
+   */
+  getAuth() {
+    return auth;
+  }
 }
 /**
  * Defalt sucess function log
- * @param  data 
+ * @param  data
  */
-const success = (data) => {
-    console.log("Data : ", data);
-}
+const success = data => {
+  console.log("Data : ", data);
+};
 
 /**
  * Default error function log
- * @param  err 
+ * @param  err
  */
-const error = (err) => {
-    console.log("Error : ", err);
-}
-
+const error = err => {
+  console.log("Error : ", err);
+};
 
 const api = new Api();
 
-
 module.exports = api;
 // window.api = api;
-
 </code></pre>
         </article>
     </section>
@@ -158,7 +205,7 @@ module.exports = api;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Mar 10 2019 22:45:25 GMT+0530 (India Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 18 2019 17:01:22 GMT+0530 (India Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
